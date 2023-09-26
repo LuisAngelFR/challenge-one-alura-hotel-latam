@@ -16,7 +16,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
-@SuppressWarnings("serial")
 public class MenuPrincipal extends JFrame {
 
 	private JPanel contentPane;

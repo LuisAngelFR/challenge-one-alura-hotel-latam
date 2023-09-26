@@ -26,7 +26,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 
-@SuppressWarnings("serial")
 public class Busqueda extends JFrame {
 
 	private JPanel contentPane;

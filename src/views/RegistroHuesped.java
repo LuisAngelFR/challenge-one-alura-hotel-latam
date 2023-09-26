@@ -26,7 +26,6 @@ import java.awt.Toolkit;
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
 
-@SuppressWarnings("serial")
 public class RegistroHuesped extends JFrame {
 
 	private JPanel contentPane;

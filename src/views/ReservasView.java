@@ -30,7 +30,6 @@ import javax.swing.border.LineBorder;
 import java.sql.Statement;
 import java.sql.ResultSet;
 
-@SuppressWarnings("serial")
 public class ReservasView extends JFrame {
 
 	private JPanel contentPane;
