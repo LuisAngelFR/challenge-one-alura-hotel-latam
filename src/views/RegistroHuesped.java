@@ -10,12 +10,18 @@ import com.toedter.calendar.JDateChooser;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.ImageIcon;
 import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.awt.Toolkit;
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
@@ -263,6 +269,30 @@ public class RegistroHuesped extends JFrame {
 		labelGuardar.setFont(new Font("Roboto", Font.PLAIN, 18));
 		labelGuardar.setBounds(0, 0, 122, 35);
 		btnguardar.add(labelGuardar);
+
+		btnguardar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String nombre = txtNombre.getText();
+				String apellido = txtApellido.getText();
+				String fechaNacimiento = ((JTextField) txtFechaN.getDateEditor().getUiComponent()).getText();
+				String nacionalidad = txtNacionalidad.getSelectedItem().toString();
+				String telefono = txtTelefono.getText();
+				Integer idReserva = Integer.parseInt(txtNreserva.getText());
+				try {
+					boolean success = guardarHuesped(nombre, apellido, fechaNacimiento, nacionalidad, telefono, idReserva);
+					if (success) {
+						Exito exito = new Exito();
+						exito.setVisible(true);
+						dispose();	 
+					} else {
+						JOptionPane.showMessageDialog(null, "Error al registrar huesped");
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 0, 489, 634);
@@ -310,6 +340,26 @@ public class RegistroHuesped extends JFrame {
 		labelExit.setHorizontalAlignment(SwingConstants.CENTER);
 		labelExit.setForeground(SystemColor.black);
 		labelExit.setFont(new Font("Roboto", Font.PLAIN, 18));
+	}
+
+	private boolean guardarHuesped(String nombre, String apellido, String fechaNacimiento, String nacionalidad, String telefono, Integer idReserva) throws SQLException {
+		String connection = "jdbc:sqlite:db/hotel.db";
+
+		String sql = "INSERT INTO huespedes(nombre, apellido, fechaNacimiento, nacionalidad, telefono, idReserva) VALUES(?,?,?,?,?,?)";
+
+		try (Connection conn = DriverManager.getConnection(connection); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setString(1, nombre);
+			pstmt.setString(2, apellido);
+			pstmt.setString(3, fechaNacimiento);
+			pstmt.setString(4, nacionalidad);
+			pstmt.setString(5, telefono);
+			pstmt.setInt(6, idReserva);
+			pstmt.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			return false;
+		}
 	}
 	
 	
